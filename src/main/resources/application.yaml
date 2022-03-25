@@ -1,0 +1,8 @@
+spring:
+   datasource:
+      url: jdbc:postgresql://localhost:5432/metropol
+      username: postgres
+      password: acehood
+
+   main:
+      allow-circular-references: true
