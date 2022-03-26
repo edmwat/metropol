@@ -3,24 +3,26 @@ package com.edmwat.metropol.services;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.edmwat.metropol.models.AuthenticationRequest;
 import com.edmwat.metropol.models.AuthenticationResponse;
+import com.edmwat.metropol.models.AppUser;
+import com.edmwat.metropol.repositories.UsersRepository;
 import com.edmwat.metropol.utils.TokenFactory;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor 
-public class AuthenticationService {
+public class UsersService {
 	
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
 	private final TokenFactory tokenFactory;
+	private final UsersRepository userRepo;
 	
 	public AuthenticationResponse createAuthenticationObject(AuthenticationRequest authReq) {
 		try {
@@ -34,8 +36,11 @@ public class AuthenticationService {
 		
 		String token = tokenFactory.createToken(userDetails);
 		
-		return new AuthenticationResponse(token);
-		
+		return new AuthenticationResponse(token);		
+	}
+	
+	public void createSystemUsers(AppUser user) {
+		userRepo.save(user);
 	}
 
 }

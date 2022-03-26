@@ -4,5 +4,5 @@ spring:
       username: postgres
       password: acehood
 
-   main:
-      allow-circular-references: true
+   jpa:
+      hibernate.ddl-auto: create-drop

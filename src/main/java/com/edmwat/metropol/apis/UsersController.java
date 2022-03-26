@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edmwat.metropol.models.AuthenticationRequest;
 import com.edmwat.metropol.models.AuthenticationResponse;
-import com.edmwat.metropol.services.AuthenticationService;
+import com.edmwat.metropol.services.UsersService;
 
 import lombok.AllArgsConstructor;
 
 @RestController 
 @RequestMapping("/authenticate")
 @AllArgsConstructor 
-public class AuthenticationController {
+public class UsersController {
 	
-	private final AuthenticationService authService;
+	private final UsersService userService;
 	
 	@PostMapping
 	public ResponseEntity<AuthenticationResponse> createAuthenticationObject(@RequestBody AuthenticationRequest authReq){
 		
-		return ResponseEntity.ok(authService.createAuthenticationObject(authReq));
+		return ResponseEntity.ok(userService.createAuthenticationObject(authReq));
 	}
  
 }
