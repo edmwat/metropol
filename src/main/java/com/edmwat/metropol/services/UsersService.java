@@ -36,7 +36,7 @@ public class UsersService {
 		
 		String token = tokenFactory.createToken(userDetails);
 		
-		return new AuthenticationResponse(token);		
+		return new AuthenticationResponse(token, authReq.getUsername());		
 	}
 	
 	public void createSystemUsers(AppUser user) {

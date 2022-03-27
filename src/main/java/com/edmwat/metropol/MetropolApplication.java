@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.edmwat.metropol.models.Account;
 import com.edmwat.metropol.models.AppUser;
+import com.edmwat.metropol.services.AccountsService;
 import com.edmwat.metropol.services.UsersService;
 
 @SpringBootApplication
@@ -23,10 +25,13 @@ public class MetropolApplication {
 	}		
 	
 	@Bean 
-	CommandLineRunner run(UsersService service) {
+	CommandLineRunner run(UsersService service, AccountsService accService) {
 		return args ->{
 			service.createSystemUsers(new AppUser(1l,"metropol1@gmail.com",passwordEncoder.encode("metropol1"), Collections.singletonList(new SimpleGrantedAuthority("USER"))));
 			service.createSystemUsers(new AppUser(2l,"metropol2@gmail.com",passwordEncoder.encode("metropol"),Collections.singletonList(new SimpleGrantedAuthority("USER"))));
-		};  
+			
+			accService.addNewAccount(new Account(1L,1234L,"KIMEQTY","metropol2@gmail.com"));
+			accService.addNewAccount(new Account(2L,4321L,"KIMKEST","metropol1@gmail.com"));
+		}; 
 	}
 }

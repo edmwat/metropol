@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class Account {
 	@Id
-	private String accountId;
-	private String iban;
+	private Long id;
+	private Long iban;
 	private String bicSwift;
 	private String clientId;
 

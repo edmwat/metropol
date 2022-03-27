@@ -36,33 +36,34 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		try {
-			final String authoriationHeader = request.getHeader("Authorization");
-			String username ="";
-			
-				if(authoriationHeader != null && authoriationHeader.startsWith("Bearer ")) {
-					String jwt = authoriationHeader.substring(7);
-					username = tokenFactory.extractUsername(jwt);
-				}else {
-					throw new AuthenticationException("not authenticated", 401);
-				}
-				if(Objects.nonNull(username) && !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
-					UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
-							new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-					
-					usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource());
-					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);			
-				}	
-			
-			filterChain.doFilter(request,response);
-		}catch(AuthenticationException e) {
-			//throw e;
-			//System.out.println(e.getMessage());
-			ErrorResponse er = new ErrorResponse();
-			er.setMessage(e.getMessage());
-			er.setErrorCode(e.getStatusCode());
-			response.getWriter().write(convertObjectToJson(er));
+		if(request.getServletPath().equals("/authenticate")) {
+			filterChain.doFilter(request, response);
+		}else {
+			try {
+				final String authoriationHeader = request.getHeader("Authorization");
+				String username ="";
+								
+					if( authoriationHeader != null && authoriationHeader.startsWith("Bearer ")) {	
+						String jwt = authoriationHeader.substring(7);
+						username = tokenFactory.extractUsername(jwt);
+					}
+					if(Objects.nonNull(username) && !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
+						UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+						UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
+								new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+						
+						usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource());
+						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);			
+					}	
+				
+				filterChain.doFilter(request,response);
+			}catch(AuthenticationException e) {
+/*
+				ErrorResponse er = new ErrorResponse();
+				er.setMessage(e.getMessage());
+				er.setErrorCode(e.getStatusCode());
+				response.getWriter().write(convertObjectToJson(er));*/
+			}
 		}
 		
 	}

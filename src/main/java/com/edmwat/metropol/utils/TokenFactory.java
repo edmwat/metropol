@@ -16,7 +16,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j 
 public class TokenFactory {
 	
 	final Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -26,21 +29,42 @@ public class TokenFactory {
 		
 		String access_token = JWT.create()
 				.withSubject(userDetails.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + (10 *60 * 1000)))
+				.withExpiresAt(new Date(System.currentTimeMillis() + (60 *60 * 1000)))
 				.withClaim("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);
 		
 		return access_token;
 	}
 
-	public DecodedJWT decodeToken(String token) {
-		
-		DecodedJWT decodedJwt = verifier.verify(token);	
-		return decodedJwt;	
+	public DecodedJWT decodeToken(String token)  {
+		DecodedJWT decodedJwt = null;
+		try {
+			decodedJwt = verifier.verify(token);	
+			//return decodedJwt;	
+		}catch(Exception e) {
+			log.error(e.getMessage());
+		}
+		return decodedJwt;		
 	}
 	
 	public String extractUsername(String token) {
-		return decodeToken(token).getSubject();
+		String subject = "";
+		try{
+			subject = decodeToken(token).getSubject();
+		}catch(Exception e) {
+			log.error(e.getMessage());
+		}
+		return subject;
+	}
+	public boolean isExpired(String token) {
+		
+		DecodedJWT decodedJwt = null;
+		try {
+			decodedJwt = verifier.verify(token);	
+		}catch(Exception e) {
+			log.error(e.getMessage());
+		}
+		return decodedJwt != null ? false : true; 
 	}
 	
 	public Collection<SimpleGrantedAuthority> extractRoles(){
