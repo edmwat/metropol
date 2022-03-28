@@ -32,8 +32,8 @@ public class MetropolApplication {
 			service.createSystemUsers(new AppUser(1l,"metropol1@gmail.com",passwordEncoder.encode("metropol1"), Collections.singletonList(new SimpleGrantedAuthority("USER"))));
 			service.createSystemUsers(new AppUser(2l,"metropol2@gmail.com",passwordEncoder.encode("metropol"),Collections.singletonList(new SimpleGrantedAuthority("USER"))));
 			
-			accService.addNewAccount(new Account(1L,1234L,"KIMEQTY","metropol2@gmail.com"));
-			accService.addNewAccount(new Account(2L,4321L,"KIMKEST","metropol1@gmail.com"));
+			accService.addNewAccount(new Account(1l,1234L,"KIMEQTY","metropol2@gmail.com"));
+			accService.addNewAccount(new Account(2l,4321L,"KIMKEST","metropol1@gmail.com"));
 			
 			cardService.addNewCard(new Card(1l,"credit card",1l,"Virtual"));
 			cardService.addNewCard(new Card(2l,"Debit card",2l,"physical"));

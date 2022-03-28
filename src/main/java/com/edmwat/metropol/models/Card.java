@@ -1,6 +1,8 @@
 package com.edmwat.metropol.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -17,4 +19,11 @@ public class Card {
 	private String alias;
 	private long accountId;
 	private String cardType;
+	
+	public Card(String alias, long accId, String cardType) {
+		this.alias= alias;
+		this.accountId = accId;
+		this.cardType=cardType;
+		
+	}
 }
