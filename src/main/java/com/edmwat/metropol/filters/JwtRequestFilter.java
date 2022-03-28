@@ -46,6 +46,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 					if( authoriationHeader != null && authoriationHeader.startsWith("Bearer ")) {	
 						String jwt = authoriationHeader.substring(7);
 						username = tokenFactory.extractUsername(jwt);
+					}else {
+						throw new AuthenticationException("Authentication Required");
 					}
 					if(Objects.nonNull(username) && !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
 						UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
@@ -58,11 +60,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				
 				filterChain.doFilter(request,response);
 			}catch(AuthenticationException e) {
-/*
+
 				ErrorResponse er = new ErrorResponse();
 				er.setMessage(e.getMessage());
 				er.setErrorCode(e.getStatusCode());
-				response.getWriter().write(convertObjectToJson(er));*/
+				response.getWriter().write(convertObjectToJson(er));
 			}
 		}
 		

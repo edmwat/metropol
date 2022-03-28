@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edmwat.metropol.AccountsWrapper;
 import com.edmwat.metropol.models.Account;
 import com.edmwat.metropol.services.AccountsService;
 
