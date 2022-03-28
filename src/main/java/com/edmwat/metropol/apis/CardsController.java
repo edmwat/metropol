@@ -25,7 +25,7 @@ public class CardsController {
 	
 	@GetMapping("/{accountId}")
 	public ResponseEntity<List<Card>> getAccountCards(@PathVariable String accountId){	
-		return ResponseEntity.ok(cardService.getAccountCards(accountId));
+		return ResponseEntity.ok(cardService.getAccountCards(Long.valueOf(accountId)));
 	}
 	
 	@PostMapping("/add")

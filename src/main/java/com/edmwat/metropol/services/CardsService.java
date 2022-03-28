@@ -15,7 +15,7 @@ public class CardsService {
 	
 	private final CardRepository cardRepo;
 	
-	public List<Card> getAccountCards(String accountId){
+	public List<Card> getAccountCards(long accountId){
 		return cardRepo.findByAccountId(accountId);
 	}
 	

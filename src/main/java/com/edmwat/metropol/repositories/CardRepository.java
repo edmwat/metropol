@@ -9,5 +9,5 @@ import com.edmwat.metropol.models.Card;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
 
-	List<Card> findByAccountId(String accountId);
+	List<Card> findByAccountId(long accountId);
 }

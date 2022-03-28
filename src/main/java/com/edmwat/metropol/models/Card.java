@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class Card {
 	@Id
-	private Long id;
+	private long id;
 	private String alias;
-	private Long accountId;
+	private long accountId;
 	private String cardType;
 }
