@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.edmwat.metropol.exceptions.AuthenticationException;
+import com.edmwat.metropol.exceptions.InvalidTokenExption;
 import com.edmwat.metropol.models.ErrorResponse;
 import com.edmwat.metropol.services.CustomUserDetailsService;
 import com.edmwat.metropol.utils.TokenFactory;
@@ -25,9 +26,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.qos.logback.core.status.Status;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component 
 @AllArgsConstructor 
+@Slf4j 
 public class JwtRequestFilter extends OncePerRequestFilter {
 	
 	private final CustomUserDetailsService customUserDetailsService;
@@ -46,6 +49,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 					if( authoriationHeader != null && authoriationHeader.startsWith("Bearer ")) {	
 						String jwt = authoriationHeader.substring(7);
 						username = tokenFactory.extractUsername(jwt);
+						
+					}else {
+						throw new InvalidTokenExption("The Token Header is Null",401);
 					}
 					if(Objects.nonNull(username) && !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
 						UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
@@ -57,11 +63,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 					}	
 				
 				filterChain.doFilter(request,response);
-			}catch(AuthenticationException e) {
-
+			}catch(RuntimeException e) {
+				log.info(e.getMessage());
 				ErrorResponse er = new ErrorResponse();
-				er.setMessage(e.getMessage());
-				er.setErrorCode(e.getStatusCode());
+				er.setMessage(e.getMessage());				
+				er.setErrorCode(401);
+				response.setStatus(401);
 				response.getWriter().write(convertObjectToJson(er));
 			}
 		}

@@ -8,6 +8,7 @@ import com.edmwat.metropol.models.Card;
 import com.edmwat.metropol.repositories.CardRepository;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Service
 @AllArgsConstructor

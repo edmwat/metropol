@@ -15,6 +15,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.edmwat.metropol.exceptions.InvalidTokenExption;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +30,7 @@ public class TokenFactory {
 		
 		String access_token = JWT.create()
 				.withSubject(userDetails.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + (60 *60 * 1000)))
+				.withExpiresAt(new Date(System.currentTimeMillis() + (1 *60 * 1000)))
 				.withClaim("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);
 		
@@ -53,6 +54,7 @@ public class TokenFactory {
 			subject = decodeToken(token).getSubject();
 		}catch(Exception e) {
 			log.error(e.getMessage());
+			throw new RuntimeException("Invalid Token!!");
 		}
 		return subject;
 	}
